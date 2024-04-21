@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import '../styles/index.css';
+import '../styles/index.scss';
 import Layout from './Layout';
 import Home from './Home';
 import ErrorPage from './ErrorPage';
