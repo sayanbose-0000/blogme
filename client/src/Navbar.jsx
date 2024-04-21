@@ -4,9 +4,11 @@ import '../styles/navbar.scss';
 const Navbar = () => {
   return (
     <div className='navbar'>
-      <p>Navbar</p>
+    <a href=""><img src='favicon.svg' alt='logo'></img></a>
+    <a href="">blogme</a>
+    <img src='user.svg' alt='user' className='user'></img>
     </div>
-  )
-}
-
-export default Navbar;
+    )
+  }
+  
+  export default Navbar;

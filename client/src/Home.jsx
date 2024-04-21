@@ -1,9 +1,22 @@
 import React from 'react'
+import BlogCard from './BlogCard';
+import '../styles/home.scss';
 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
-
-export default Home;
+    <div className='home'>
+      <BlogCard/>
+      <BlogCard/>
+      <BlogCard/>
+      <BlogCard/>
+      <BlogCard/>
+      <BlogCard/>
+      <BlogCard/>
+      <BlogCard/>
+      <BlogCard/>
+      <BlogCard/>
+    </div>
+    )
+  }
+  
+  export default Home;

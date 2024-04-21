@@ -4,8 +4,34 @@
     padding: 0;
     outline: none;
     border: none;
+    font-family: 'Poppins',Arial, Helvetica, sans-serif;
 }
 
 body {
-    min-height: 200vh;
+    min-height: fit-content;
+    background-color: black;
+    color: whitesmoke;
 }
+
+
+// custom scrollbar css
+::-webkit-scrollbar {
+    width: 7px; /* width of the scrollbar */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #000000; /* color of the track */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #111111; /* color of the scrollbar handle */
+    border-radius: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #292929; /* color of the scrollbar handle on hover */
+}
+
