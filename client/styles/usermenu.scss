@@ -1,0 +1,29 @@
+.usermenu {
+  position: absolute;
+  top: 40px;
+  right: 0px;
+  margin: 10px;
+  backdrop-filter: blur(5px);
+  // padding: px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.192);
+  height: 100px;
+  width: 100px;
+  
+  // box-shadow: rgba(255, 255, 255, 0.2)5px 15px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    color: whitesmoke;
+    text-decoration: none;
+    width: min-content;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
