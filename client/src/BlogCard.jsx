@@ -9,6 +9,6 @@ const BlogCard = () => {
       <p>Summary</p>
     </div>
   )
-} 
-  
+}
+
 export default BlogCard;
