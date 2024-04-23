@@ -1,10 +1,11 @@
 import '../styles/usermenu.scss';
+import { Link } from 'react-router-dom';
 
 const UserMenu = () => {
-  return(
+  return (
     <div className='usermenu'>
-      <a href="">Login</a>
-      <a href="">Signup</a>
+      <Link to="/login">Login</Link>
+      <Link to="/signup">Signup</Link>
     </div>
   );
 };

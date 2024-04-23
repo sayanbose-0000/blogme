@@ -7,7 +7,7 @@ const BlogCard = () => {
       <img src="person.jpg" alt="blogimg" height={100} width={100} />
       <div className="content">
         <div className="details">
-          <p className="author"></p>
+          <p className="author">Aman</p>
           <p className="date">12/1/23</p>
         </div>
         <p className='title'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reprehenderit blanditiis assumenda magni repudiandae quae natus labore, qui quas perspiciatis, quisquam quia unde accusantium dolor cupiditate cum laudantium, nostrum beatae mollitia?</p>
