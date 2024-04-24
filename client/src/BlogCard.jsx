@@ -1,10 +1,15 @@
 import React from 'react';
 import '../styles/blogcard.scss';
+import { Link } from 'react-router-dom';
 
 const BlogCard = () => {
   return (
-    <div className='blogcard'>
-      <img src="person.jpg" alt="blogimg" height={100} width={100} />
+    <Link to="/blogpost" className='blogcard'>
+      <img src="person.jpg" className="blogimg" alt="blogimg" height={100} width={100} />
+      <div className="likes">
+        <p className="likescount">10k</p>
+        <img src="heart_fill.svg" alt="heart" className="heart" height={100} width={100} />
+      </div>
       <div className="content">
         <div className="details">
           <p className="author">Aman</p>
@@ -13,7 +18,7 @@ const BlogCard = () => {
         <p className='title'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reprehenderit blanditiis assumenda magni repudiandae quae natus labore, qui quas perspiciatis, quisquam quia unde accusantium dolor cupiditate cum laudantium, nostrum beatae mollitia?</p>
         <p className='summary'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam non at, id esse facilis nam totam nihil quibusdam nemo consequuntur vitae fuga enim sunt corrupti ducimus. Quae quos fugit neque?</p>
       </div>
-    </div>
+    </Link>
   )
 }
 

@@ -4,6 +4,7 @@ import '../styles/index.scss';
 import Layout from './Layout';
 import Home from './Home';
 import ErrorPage from './ErrorPage';
+import BlogPage from './BlogPage';
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from './Login';
@@ -26,7 +27,11 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignUp />
-      }
+      },
+      {
+        path: "/blogpost",
+        element: <BlogPage />
+      },
     ]
   },
 ]);

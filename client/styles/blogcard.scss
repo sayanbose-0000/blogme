@@ -1,53 +1,79 @@
 .blogcard {
-    width: 290px;
-    height: 300px;
-    overflow: hidden;
-    margin: 10px;
-    padding: 10px;
+  width: 290px;
+  height: 300px;
+  overflow: hidden;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(245, 245, 245, 0.192);
+  position: relative;
+  text-decoration: none;
+
+  >.blogimg {
+    object-fit: cover;
+    height: 150px;
+    width: 100%;
+    border-radius: 6px;
+  }
+
+  .likes {
+    position: absolute;
+    top: 120px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    backdrop-filter: blur(25px);
+    // background-color: white;
+    padding: 5px;
     border-radius: 10px;
-    border: 1px solid rgba(245, 245, 245, 0.192);
 
-    >img {
-        object-fit: cover;
-        height: 150px;
-        width: 100%;
-        border-radius: 6px;
+    .heart {
+      height: 20px;
+      width: 20px;
     }
 
-    >.content {
-        width: 100%;
-        height: calc(100% - 150px);
-        cursor: pointer;
-
-        >p {
-            text-align: left;
-            overflow: hidden;
-            hyphens: auto;
-        }
-
-        >.title {
-            height: 40%;
-            color: rgba(245, 245, 245, 0.766);
-        }
-
-        >.summary {
-            font-size: 0.92rem;
-            height: 50%;
-            color: rgba(245, 245, 245, 0.511);
-        }
-
-        .details {
-            font-size: 0.7rem;
-            height: 10%;
-            color: rgba(245, 245, 245, 0.334);
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .likescount {
+      color: whitesmoke;
+      font-size: 0.8rem;
     }
+  }
+
+  >.content {
+    width: 100%;
+    height: calc(100% - 150px);
+    cursor: pointer;
+
+    >p {
+      text-align: left;
+      overflow: hidden;
+      hyphens: auto;
+    }
+
+    >.title {
+      height: 40%;
+      color: rgba(245, 245, 245, 0.766);
+    }
+
+    >.summary {
+      font-size: 0.92rem;
+      height: 50%;
+      color: rgba(245, 245, 245, 0.511);
+    }
+
+    .details {
+      font-size: 0.7rem;
+      height: 10%;
+      color: rgba(245, 245, 245, 0.334);
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 }
 
 .blogcard:hover {
-    outline: 2px solid white;
+  outline: 2px solid white;
 }

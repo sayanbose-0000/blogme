@@ -25,7 +25,7 @@ const SignUp = () => {
   const handleSignUp = (e) => {
     e.preventDefault();
     if (!fileView) {
-      alert("Choose an image!!");
+      alert("Please choose an image :)");
       return;
     }
 
@@ -34,10 +34,10 @@ const SignUp = () => {
   return (
     <div className='signup register'>
       <form onSubmit={(e) => { handleSignUp(e) }}>
-        <h1>SignUp</h1>
+        <h1>Sign Up</h1>
         <input type="file" id="fileselect" accept="image/*" onChange={e => { handleFileView(e) }} />
         <img className="imageholder" onClick={handleClickImageHolder} src={fileView ? `${fileView}` : 'user.svg'} height={100} width={100}></img>
-        <input type="text" placeholder='Enter username...' autoComplete="username" required />
+        <input type="text" placeholder='Enter username...' autoComplete="username" required autoFocus/>
         <input type="email" placeholder='Enter email...' autoComplete="email" required />
         <input type="password" placeholder='Enter password...' autoComplete="new-password" required />
         <button type='submit' className='submit'>SignUp</button>
