@@ -1,6 +1,8 @@
 import '../styles/blogpage.scss';
 
 const BlogPage = () => {
+  const quill = new Quill('#editor');
+
   return (
     <div className='blogpage'>
 

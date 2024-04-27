@@ -51,11 +51,21 @@
           }
         }
       }
+
+      .author_date {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px;
+        font-size: 0.9rem;
+        color: rgba(245, 245, 245, 0.334);
+      }
     }
 
     .blogcontent {
       padding: 10px;
       min-height: 100%;
+      color: (245, 245, 245, 0.766)
     }
   }
 }
