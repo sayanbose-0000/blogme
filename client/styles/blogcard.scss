@@ -26,17 +26,18 @@
     gap: 5px;
     backdrop-filter: blur(25px);
     // background-color: white;
-    padding: 5px;
-    border-radius: 10px;
+    background-color: black;
+    padding: 6px;
+    border-radius: 30px;
 
     .heart {
-      height: 20px;
-      width: 20px;
+      height: 15px;
+      width: 15px;
     }
 
     .likescount {
       color: whitesmoke;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
     }
   }
 

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const BlogCard = () => {
   return (
     <Link to="/blogpost" className='blogcard'>
-      <img src="person.jpg" className="blogimg" alt="blogimg" height={100} width={100} />
+      <img src="placeholder.jpg" className="blogimg" alt="blogimg" height={100} width={100} />
       <div className="likes">
         <p className="likescount">10k</p>
         <img src="heart_fill.svg" alt="heart" className="heart" height={100} width={100} />

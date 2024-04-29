@@ -9,6 +9,7 @@ import BlogPage from './BlogPage';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from './Login';
 import SignUp from './SignUp';
+import CreatePost from './CreatePost';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/blogpost",
         element: <BlogPage />
+      },
+      {
+        path: "/create",
+        element: <CreatePost />
       },
     ]
   },
