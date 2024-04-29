@@ -3,14 +3,17 @@
   top: 40px;
   right: 0px;
   margin: 10px;
-  backdrop-filter: blur(5px);
+  // backdrop-filter: blur(5px);
   // padding: px;
+  background-color: black;
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.192);
   height: 100px;
   width: 100px;
 
   // box-shadow: rgba(255, 255, 255, 0.2)5px 15px;
+
+  animation: displaybox 0.5s;
 
   display: flex;
   flex-direction: column;
@@ -26,4 +29,13 @@
   a:hover {
     text-decoration: underline;
   }
+}
+
+@keyframes displaybox {
+ from {
+  opacity: 0;
+ }
+ to {
+  opacity: 100%;
+ }
 }

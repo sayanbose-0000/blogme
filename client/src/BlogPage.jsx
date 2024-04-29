@@ -18,16 +18,16 @@ const BlogPage = () => {
             <img src="placeholder.jpg" className="blogimg" alt="blogimg" height={100} width={100} />
             <div className="likes">
               <p className="likescount">10k</p>
-              <img src="heart_fill.svg" alt="heart" className="heart" height={100} width={100} />
+              <img src="heart_empty.svg" alt="heart" className="heart" height={100} width={100} />
             </div>
           </div>
           <div className="author_date">
             <p>Ram</p>
-            <p className='title'> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Impedit, mollitia!  elit. Fugit, optio.</p>
             <p>13/1/22</p>
           </div>
         </div>
         <div className="blogcontent">
+            <p className='title'> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Impedit, mollitia!  elit. Fugit, optio.</p>
           <div dangerouslySetInnerHTML={{ __html: cleanHTML }} className='content' />
         </div>
       </div>

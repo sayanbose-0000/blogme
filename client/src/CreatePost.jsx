@@ -1,7 +1,13 @@
 import '../styles/createpost.scss';
 import { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { formats, modules } from './QuillExtentions';
 
 const CreatePost = () => {
+  const [title, setTitle] = useState('');
+  const [summary, setSummary] = useState('');
+  const [content, setContent] = useState('');
 
   const dateNow = new Date();
   const date = dateNow.getDate();
@@ -51,7 +57,11 @@ const CreatePost = () => {
           </div>
         </div>
         <form className="blogcontent" onSubmit={(e) => { handleSignUp(e) }}>
-          <p>Hello</p>
+          <div className="title_summary">
+            <input type="text" name="" id="" placeholder='Enter title' className='title' value={title} onChange={(e) => { setTitle(e.target.value) }} required/>
+            <input type="text" name="" id="" placeholder='Enter summary' className='summary' value={summary} onChange={(e) => { setSummary(e.target.value) }} required/>
+          </div>
+          <ReactQuill value={content} modules={modules} formats={formats} onChange={setContent} />
           <button className='submit'>Submit</button>
         </form>
       </div>

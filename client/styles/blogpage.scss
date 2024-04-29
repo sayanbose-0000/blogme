@@ -9,22 +9,23 @@
     border: 1px solid rgba(245, 245, 245, 0.192);
     border-radius: 15px;
     margin: 20px;
-    // padding: 20px;
+    padding: 10px;
     min-height: 85vh;
     width: 90%;
 
     .blogstart {
       .image_likes {
-        background-color: whitesmoke;
+        background-color: rgb(0, 0, 0);
         width: 100%;
         border-radius: 15px 15px 0 0;
         height: 240px;
         position: relative;
-
+        
         .blogimg {
           height: 100%;
           width: 100%;
           object-fit: cover;
+          border-radius: 10px;
         }
 
         .likes {
@@ -39,6 +40,7 @@
           background-color: black;
           padding: 6px;
           border-radius: 30px;
+          cursor: pointer;
 
           .heart {
             height: 15px;
@@ -61,12 +63,15 @@
         font-size: 0.9rem;
         color: rgba(245, 245, 245, 0.334);
 
-        .title {
-          text-align: center;
-          color: whitesmoke;
-          font-weight: bolder;
-        }
       }
+    }
+    
+    .title {
+      text-align: center;
+      color: whitesmoke;
+      font-weight: bolder;
+      padding: 0 0 2px 0;
+      border-bottom: 1px solid rgba(245, 245, 245, 0.192);
     }
 
     .blogcontent {
