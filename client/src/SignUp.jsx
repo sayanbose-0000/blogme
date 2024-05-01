@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../styles/register.scss';
+import { BACK_URL } from './main';
 
 const SignUp = () => {
   const [fileView, setFileView] = useState(null);
@@ -7,6 +8,7 @@ const SignUp = () => {
   const handleSignUp = (e) => {
     e.preventDefault();
 
+    fetch(`${BACK_URL}`, )
   }
 
   return (

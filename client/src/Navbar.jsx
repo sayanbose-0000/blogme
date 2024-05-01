@@ -20,7 +20,7 @@ const Navbar = () => {
     <div className='navbar'>
       <Link to="/"><img src='favicon.svg' alt='logo' height={100} width={100}></img></Link>
       <Link to="/">blogme</Link>
-      <img src='user.svg' alt='user' className='user' onClick={(e) => { handleUserMenu(e) }} height={100} width={100}></img>
+      <img src='hamburger.svg' alt='user' className='user' onClick={(e) => { handleUserMenu(e) }} height={100} width={100}></img>
       {userMenu && <UserMenu />}
     </div>
   )

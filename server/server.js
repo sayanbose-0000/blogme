@@ -36,5 +36,5 @@ const saltRounds = 10; // used in bcrypt for hasing the password
 
 // ---------- SIGN UP ---------------
 app.post('/server/signup', (req, res) => {
-
+  
 }) 
