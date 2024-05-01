@@ -27,18 +27,8 @@
     border-radius: 15px;
     border: 1px solid rgba(245, 245, 245, 0.192);
 
-    #fileselect {
-      display: none;
-    }
-
-    .imageholder {
-      object-fit: cover;
-    }
-
-    .imageholder {
-      height: 100px;
-      width: 100px;
-      border-radius: 50%;
+    h1 {
+      margin-bottom: 20px;
     }
 
     input {
@@ -51,7 +41,7 @@
     }
 
     .submit {
-      margin-top: 0px;
+      margin-top: 20px;
       border-radius: 5px;
       padding: 10px;
       cursor: pointer;

@@ -11,6 +11,8 @@ import Login from './Login';
 import SignUp from './SignUp';
 import CreatePost from './CreatePost';
 
+const BACK_URL = import.meta.env.BACK_URL;
+
 const router = createBrowserRouter([
   {
     path: "/",

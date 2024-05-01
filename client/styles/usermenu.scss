@@ -13,7 +13,7 @@
 
   // box-shadow: rgba(255, 255, 255, 0.2)5px 15px;
 
-  animation: displaybox 0.5s;
+  // animation: displaybox 0.5s;
 
   display: flex;
   flex-direction: column;
@@ -31,11 +31,11 @@
   }
 }
 
-@keyframes displaybox {
- from {
-  opacity: 0;
- }
- to {
-  opacity: 100%;
- }
-}
+// @keyframes displaybox {
+//  from {
+//   opacity: 0;
+//  }
+//  to {
+//   opacity: 100%;
+//  }
+// }

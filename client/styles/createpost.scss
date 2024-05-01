@@ -97,8 +97,10 @@
 
       .submit {
         padding: 6px;
+        width: 50%;
         border-radius: 5px;
         cursor: pointer;
+        align-self: center;
       }
 
       .submit:hover {

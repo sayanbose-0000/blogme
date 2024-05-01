@@ -7,6 +7,7 @@ const Navbar = () => {
   const [userMenu, setUserMenu] = useState(false);
   const location = useLocation(); // detects route change
 
+
   const handleUserMenu = (e) => {
     setUserMenu(!userMenu);
   }
