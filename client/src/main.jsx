@@ -11,7 +11,10 @@ import Login from './Login';
 import SignUp from './SignUp';
 import CreatePost from './CreatePost';
 
-export const BACK_URL = import.meta.env.BACK_URL;
+// const BACK_URL = import.meta.env.VITE_API_BASE_URL;  // do this and add .env while using vercel, only works with vercel
+const BACK_URL = 'http://localhost:3000' // and delete this
+
+export { BACK_URL };
 
 const router = createBrowserRouter([
   {
@@ -46,5 +49,5 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>,
+  </React.StrictMode>
 )

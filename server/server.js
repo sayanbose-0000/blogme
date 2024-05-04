@@ -12,10 +12,6 @@ const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
 const FRONT_URL = process.env.FRONT_URL;
 
-app.listen(PORT, () => {
-  console.log("App running perfectly...");
-})
-
 // allowed stuffs by cors
 const corsOptions = {
   origin: FRONT_URL,
@@ -30,17 +26,21 @@ app.use(cors(corsOptions)); // for preventing cors error
 // connecting mongodb
 mongoose.connect(MONGO_URI);
 
+app.listen(PORT, () => {
+  console.log("App running perfectly...");
+})
+
 const saltRounds = 10; // used in bcrypt for hasing the password
 
 // ----------- END POINTS --------------
 
 
 // ---------- SIGN UP ---------------
-app.post('/server/signup', (req, res) => {
+app.post('/signup', (req, res) => {
   const { userName, email, password } = req.body;
+  res.status(200).json("OK")
+  // bcrypt.hash(password, saltRounds, function (err, hash) {
+  //   // write the mongodb accessing code here
+  // });
 
-  bcrypt.hash(password, saltRounds, function (err, hash) {
-    // write the mongodb accessing code here
-  });
-
-}) 
+})

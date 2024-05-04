@@ -11,6 +11,7 @@ const SignUp = () => {
     e.preventDefault();
 
     console.log(userName, email, password)
+    console.log(BACK_URL);
 
     const response = await fetch(`${BACK_URL}/signup`, {
       method: 'POST',
