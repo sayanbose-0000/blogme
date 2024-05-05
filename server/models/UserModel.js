@@ -2,15 +2,15 @@ import { Schema, model } from "mongoose";
 
 const UserSchema = new Schema(
   {
-    username: {
+    userName: {
       type: String,
       required: true,
       unique: true,
     },
     email: {
       type: String,
+      required: true,
       unique: true,
-      required: true
     },
     password: {
       type: String,
@@ -19,6 +19,6 @@ const UserSchema = new Schema(
   }
 )
 
-const UserModel = model('user', UserSchema);
+const UserModel = model('blogme-users', UserSchema);
 
 export default UserModel;

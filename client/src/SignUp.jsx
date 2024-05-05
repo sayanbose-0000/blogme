@@ -10,11 +10,9 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    console.log(userName, email, password)
-    console.log(BACK_URL);
-
     const response = await fetch(`${BACK_URL}/signup`, {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'Application/json' },
       body: JSON.stringify({
         userName,
@@ -22,6 +20,13 @@ const SignUp = () => {
         password
       })
     })
+    if (response.ok) {
+      console.log (await response.json())
+    }
+    else {
+      const data = await response.json()
+      console.log(data.message)
+    }
   }
 
   return (
