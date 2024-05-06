@@ -10,23 +10,7 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(`${BACK_URL}/signup`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'Application/json' },
-      body: JSON.stringify({
-        userName,
-        email,
-        password
-      })
-    })
-    if (response.ok) {
-      console.log (await response.json())
-    }
-    else {
-      const data = await response.json()
-      console.log(data.message)
-    }
+    
   }
 
   return (
