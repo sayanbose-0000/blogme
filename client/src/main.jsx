@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createContext, useContext } from 'react';
 import '../styles/index.scss';
 import Layout from './Layout';
 import Home from './Home';
@@ -16,6 +17,17 @@ import 'react-toastify/dist/ReactToastify.css';
 const BACK_URL = 'http://localhost:3000' // and delete this
 
 export { BACK_URL };
+
+const userAuthContext = createContext({});
+
+const UserContextProvider = ({ children }) => {
+  const [userInfo, setUserInfo] = useState({});
+  return (
+    <userAuthContext.Provider value={{ userInfo, setUserInfo }}>
+      {children}
+    </userAuthContext.Provider>
+  )
+}
 
 const router = createBrowserRouter([
   {
@@ -49,7 +61,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-    <ToastContainer position="bottom-left" autoClose={2000} hideProgressBar={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover={false} theme="dark" transition={Bounce} />
+    <UserContextProvider>
+      <RouterProvider router={router} />
+      <ToastContainer position="bottom-left" autoClose={2000} hideProgressBar={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover={false} theme="dark" transition={Bounce} />
+    </UserContextProvider>
   </React.StrictMode>
 )

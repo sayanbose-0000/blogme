@@ -31,7 +31,9 @@ app.listen(PORT, () => {
 // ---- End Points----
 
 // -- Sign up --
-app.post('/signup', async (req, res) => {
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+
+app.post('/signup', (req, res) => {
   const { userName, email, password } = req.body;
   const saltRounds = 10;
 
@@ -47,8 +49,7 @@ app.post('/signup', async (req, res) => {
         email,
         password: hashedPassword
       })
-      
-      const PRIVATE_KEY = process.env.PRIVATE_KEY;
+
       var token = jwt.sign({ userName: userSignUpDoc.userName, id: userSignUpDoc._id }, PRIVATE_KEY);
 
       res.cookie('token', token, {
@@ -68,3 +69,34 @@ app.post('/signup', async (req, res) => {
     }
   });
 })
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const userLoginDoc = await UserModel.findOne({ email });
+
+    const passwordIsOkay = await bcrypt.compare(password, userLoginDoc.password);
+
+    if (passwordIsOkay) {
+      var token = jwt.sign({ userName: userLoginDoc.userName, id: userLoginDoc._id }, PRIVATE_KEY);
+
+      res.cookie('token', token, {
+        path: '/',
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 30, // token valid for a month
+        sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+        secure: process.env.NODE_ENV === "Development" ? false : true
+      });
+
+      res.status(200).json("Successful log in");
+    }
+    else {
+      res.status(500).json("Wrong Password");
+    }
+  }
+  catch (err) {
+    res.status(500).json("Incorrect credentials");
+  }
+});
+

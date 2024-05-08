@@ -2,11 +2,13 @@ import { useState } from 'react';
 import '../styles/register.scss';
 import { BACK_URL } from './main';
 import { toast } from 'react-toastify';
+import { Navigate } from 'react-router-dom';
 
 const SignUp = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [redirect, setRedirect] = useState(false);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -23,7 +25,11 @@ const SignUp = () => {
     })
 
     response.ok ? toast.success(await response.json()) : toast.error(await response.json());
-    // const notify = () => toast("Wow so easy!");
+    response.ok ? setRedirect(true) : null;
+  }
+
+  if (redirect) {
+    return <Navigate to={'/'} />
   }
 
   return (
