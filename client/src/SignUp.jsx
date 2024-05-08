@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import '../styles/register.scss';
 import { BACK_URL } from './main';
+import { toast } from 'react-toastify';
 
 const SignUp = () => {
   const [userName, setUserName] = useState('');
@@ -10,7 +11,19 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    
+    const response = await fetch(`${BACK_URL}/signup`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userName,
+        email,
+        password
+      })
+    })
+
+    response.ok ? toast.success(await response.json()) : toast.error(await response.json());
+    // const notify = () => toast("Wow so easy!");
   }
 
   return (
