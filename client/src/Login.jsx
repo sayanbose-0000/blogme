@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import '../styles/register.scss';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useOutletContext } from 'react-router-dom';
 import { BACK_URL } from './main';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
+  const [loggedIn, setLoggedIn] = useOutletContext();
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -26,9 +28,18 @@ const Login = () => {
     response.ok ? setRedirect(true) : null;
   }
 
+  // useEffect(() => {
+  //   if (redirect) {
+  //     setLoggedIn(true);
+  //     <Navigate to={'/'} />
+  //   }
+  // }, [redirect]);
+
   if (redirect) {
+    setLoggedIn(true)
     return <Navigate to={'/'} />
   }
+
 
   return (
     <div className='signup register'>

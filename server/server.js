@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import UserModel from './models/UserModel.js';
 import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -18,6 +19,7 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
+app.use(cookieParser());
 
 const MONGO_URI = process.env.MONGO_URI;
 mongoose.connect(MONGO_URI);
@@ -28,9 +30,9 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 })
 
-// ---- End Points----
+// ---- End Points ----
 
-// -- Sign up --
+// -- Sign Up --
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 app.post('/signup', (req, res) => {
@@ -70,6 +72,7 @@ app.post('/signup', (req, res) => {
   });
 })
 
+// -- Log In --
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -100,3 +103,26 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// // -- Verify User --
+app.get('/profile', async (req, res) => {
+  const { token } = req.cookies; // using cookie parser library
+
+  jwt.verify(token, PRIVATE_KEY, (err, info) => {
+
+    if (err) {
+      res.status(401).json({ error: "Invalid token" });
+      return;
+    }
+    res.status(200).json(info);
+  });
+})
+
+app.post('/logout', async (req, res) => {
+  try {
+    res.cookie('token', '');
+    res.status(200).json(null)
+  }
+  catch (e) {
+    res.status(500).json("Error logging out")
+  }
+})

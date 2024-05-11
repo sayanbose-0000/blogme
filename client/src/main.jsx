@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { createContext, useContext } from 'react';
+import { createContext } from 'react';
 import '../styles/index.scss';
 import Layout from './Layout';
 import Home from './Home';
@@ -12,22 +12,12 @@ import SignUp from './SignUp';
 import CreatePost from './CreatePost';
 import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UserContextProvider from './UserContextProvider';
 
 // const BACK_URL = import.meta.env.VITE_API_BASE_URL;  // do this and add .env while using vercel, only works with vercel
 const BACK_URL = 'http://localhost:3000' // and delete this
 
 export { BACK_URL };
-
-const userAuthContext = createContext({});
-
-const UserContextProvider = ({ children }) => {
-  const [userInfo, setUserInfo] = useState({});
-  return (
-    <userAuthContext.Provider value={{ userInfo, setUserInfo }}>
-      {children}
-    </userAuthContext.Provider>
-  )
-}
 
 const router = createBrowserRouter([
   {
@@ -59,7 +49,9 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
   <React.StrictMode>
     <UserContextProvider>
       <RouterProvider router={router} />
