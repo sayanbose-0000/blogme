@@ -126,3 +126,8 @@ app.post('/logout', async (req, res) => {
     res.status(500).json("Error logging out")
   }
 })
+
+app.post('/post', (req, res) => {
+  const {fileView, title, summary, content, date, likes} = req.cookies;
+  console.log(fileView, title, summary, content, date, likes);
+})

@@ -2,12 +2,14 @@ import '../styles/createpost.scss';
 import { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { BACK_URL } from './main';
 import { formats, modules } from './QuillExtentions';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
+  const [fileView, setFileView] = useState(null);
 
   const dateNow = new Date();
   const date = dateNow.getDate();
@@ -15,7 +17,6 @@ const CreatePost = () => {
   const year = dateNow.getFullYear() % 100; // only last 2 digits
   const timeNow = `${date}/${month}/${year}`;
 
-  const [fileView, setFileView] = useState(null);
 
   const handleFileView = (e) => {
     const img = e.target.files[0];
@@ -31,8 +32,21 @@ const CreatePost = () => {
     }
   }
 
-  const handleClickImageHolder = () => {
+  const handleClickImageHolder = async () => {
     document.getElementById("fileselect").click();
+
+    const response = await fetch(`${BACK_URL}/post`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'Application/json' },
+      body: JSON.stringify({
+        fileView,
+        title,
+        summary,
+        content,
+        date,
+        likes: 0
+      })
+    })
   }
 
   const handleSignUp = (e) => {
@@ -58,8 +72,8 @@ const CreatePost = () => {
         </div>
         <form className="blogcontent" onSubmit={(e) => { handleSignUp(e) }}>
           <div className="title_summary">
-            <input type="text" name="" id="" placeholder='Enter title' className='title' value={title} onChange={(e) => { setTitle(e.target.value) }} required/>
-            <input type="text" name="" id="" placeholder='Enter summary' className='summary' value={summary} onChange={(e) => { setSummary(e.target.value) }} required/>
+            <input type="text" name="" id="" placeholder='Enter title' className='title' value={title} onChange={(e) => { setTitle(e.target.value) }} required />
+            <input type="text" name="" id="" placeholder='Enter summary' className='summary' value={summary} onChange={(e) => { setSummary(e.target.value) }} required />
           </div>
           <ReactQuill value={content} modules={modules} formats={formats} onChange={setContent} />
           <button className='submit'>Submit</button>

@@ -9,22 +9,32 @@ const PostSchema = new Schema(
 
     title: {
       type: String,
-      require: true
+      required: true
     },
 
     summary: {
       type: String,
-      require: true
+      required: true
     },
 
     content: {
       type: String,
-      require: true
+      required: true
     },
 
     author: {
       type: Schema.Types.ObjectId,
       ref: 'blogme-users'
+    },
+
+    date: {
+      type: String,
+      required: true
+    },
+
+    likes: {
+      type: Number,
+      required: true
     }
   }
 )
