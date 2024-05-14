@@ -1,5 +1,5 @@
 import '../styles/createpost.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { BACK_URL } from './main';
@@ -10,12 +10,15 @@ const CreatePost = () => {
   const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
   const [fileView, setFileView] = useState(null);
+  const [timeNow, setTimeNow] = useState('');
 
-  const dateNow = new Date();
-  const date = dateNow.getDate();
-  const month = dateNow.getMonth() + 1; // normally 0-indexed, converted to 1
-  const year = dateNow.getFullYear() % 100; // only last 2 digits
-  const timeNow = `${date}/${month}/${year}`;
+  useEffect(() => {
+    const dateNow = new Date();
+    const date = dateNow.getDate();
+    const month = dateNow.getMonth() + 1; // normally 0-indexed, converted to 1
+    const year = dateNow.getFullYear() % 100; // only last 2 digits
+    setTimeNow(`${date}/${month}/${year}`);
+  }, [])
 
 
   const handleFileView = (e) => {
@@ -37,24 +40,38 @@ const CreatePost = () => {
 
     const response = await fetch(`${BACK_URL}/post`, {
       method: 'POST',
-      headers: { 'Content-Type': 'Application/json' },
+      // headers: { 'Content-Type': 'Application/json' },
       body: JSON.stringify({
         fileView,
         title,
         summary,
         content,
-        date,
+        timeNow,
         likes: 0
       })
     })
   }
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     if (!fileView) {
       alert("Please choose an image :)");
       return;
     }
+
+    const formData = new FormData();
+    formData.append('fileView', fileView);
+    formData.append('title', title);
+    formData.append('summary', summary);
+    formData.append('content', content);
+    formData.append('timeNow', timeNow);
+    formData.append('likes', 0);
+
+    const response = await fetch(`${BACK_URL}/post`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData
+    })
   }
 
   return (
@@ -80,7 +97,6 @@ const CreatePost = () => {
         </form>
       </div>
     </div>
-
   );
 };
 

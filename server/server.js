@@ -6,6 +6,13 @@ import bcrypt from 'bcrypt';
 import UserModel from './models/UserModel.js';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import multer from 'multer';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 
 const app = express();
 
@@ -18,23 +25,37 @@ const corsOptions = {
   credentials: true
 }
 app.use(cors(corsOptions));
-
-app.use(cookieParser());
+app.use('/uploads', express.static(`${__dirname}/uploads`));
+app.use(cookieParser()); // used for req.cookies, also do ceredentials: include in front end
 
 const MONGO_URI = process.env.MONGO_URI;
 mongoose.connect(MONGO_URI);
 
-app.use(express.json()) // middle ware
+app.use(express.json({ limit: '10mb' })); // middleware
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 })
 
+const multerUpload = multer({
+  limits: {
+    fieldSize: 10 * 1024 * 1024, // 10 mb
+  },
+
+  dest: 'uploads/'
+});
+
+// const multerUpload = multer({ dest: 'uploads/' });
+
+
+
+const PRIVATE_KEY = process.env.PRIVATE_KEY; // used in jwt
+
 // ---- End Points ----
 
 // -- Sign Up --
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
-
 app.post('/signup', (req, res) => {
   const { userName, email, password } = req.body;
   const saltRounds = 10;
@@ -59,10 +80,10 @@ app.post('/signup', (req, res) => {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 30, // token valid for a month
         sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-        secure: process.env.NODE_ENV === "Development" ? false : true
+        secure: process.env.NODE_ENV !== "Development"
       });
 
-      res.status(200).json("Successful sign up");
+      res.status(201).json("Successful sign up");
 
     }
     catch (err) {
@@ -71,6 +92,7 @@ app.post('/signup', (req, res) => {
     }
   });
 })
+
 
 // -- Log In --
 app.post('/login', async (req, res) => {
@@ -89,21 +111,22 @@ app.post('/login', async (req, res) => {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 30, // token valid for a month
         sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-        secure: process.env.NODE_ENV === "Development" ? false : true
+        secure: process.env.NODE_ENV !== "Development"
       });
 
       res.status(200).json("Successful log in");
     }
     else {
-      res.status(500).json("Wrong Password");
+      res.status(401).json("Wrong Password");
     }
   }
   catch (err) {
-    res.status(500).json("Incorrect credentials");
+    res.status(401).json("Incorrect credentials");
   }
-});
+})
 
-// // -- Verify User --
+
+// -- Verify User --
 app.get('/profile', async (req, res) => {
   const { token } = req.cookies; // using cookie parser library
 
@@ -117,6 +140,8 @@ app.get('/profile', async (req, res) => {
   });
 })
 
+
+// -- Logout --
 app.post('/logout', async (req, res) => {
   try {
     res.cookie('token', '');
@@ -127,7 +152,12 @@ app.post('/logout', async (req, res) => {
   }
 })
 
-app.post('/post', (req, res) => {
-  const {fileView, title, summary, content, date, likes} = req.cookies;
-  console.log(fileView, title, summary, content, date, likes);
+
+// -- Post Blog --
+app.post('/post', multerUpload.single('fileView'), (req, res) => {
+  const { title, summary, content, timeNow, likes } = req.body;
+  const { fileView } = req.file;
+  const token = req.cookies;
+
+  res.status(200).json(title, summary, content, timeNow, likes, fileView);
 })
