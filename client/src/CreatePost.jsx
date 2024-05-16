@@ -4,70 +4,61 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { BACK_URL } from './main';
 import { formats, modules } from './QuillExtentions';
+import { toast } from 'react-toastify';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
-  const [fileView, setFileView] = useState(null);
   const [timeNow, setTimeNow] = useState('');
+  const [image, setImage] = useState('');
+  const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
+    updateDate();
+  }, [])
+
+  const updateDate = () => {
     const dateNow = new Date();
     const date = dateNow.getDate();
     const month = dateNow.getMonth() + 1; // normally 0-indexed, converted to 1
     const year = dateNow.getFullYear() % 100; // only last 2 digits
     setTimeNow(`${date}/${month}/${year}`);
-  }, [])
-
-
-  const handleFileView = (e) => {
-    const img = e.target.files[0];
-
-    if (img) {
-      var reader = new FileReader();
-
-      reader.onload = function () {
-        setFileView(reader.result);
-      }
-
-      reader.readAsDataURL(img);
-    }
   }
 
-  const handleClickImageHolder = async () => {
-    document.getElementById("fileselect").click();
+  const handleImageClick = (e) => {
+    const selectedImage = e.target.files[0];
+    setImage(selectedImage);
 
-    const response = await fetch(`${BACK_URL}/post`, {
-      method: 'POST',
-      // headers: { 'Content-Type': 'Application/json' },
-      body: JSON.stringify({
-        fileView,
-        title,
-        summary,
-        content,
-        timeNow,
-        likes: 0
-      })
-    })
+    if (selectedImage) {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(selectedImage);
+
+      fileReader.onload = () => {
+        setImageSrc(fileReader.result);
+      }
+    }
   }
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (!fileView) {
-      alert("Please choose an image :)");
+
+    updateDate();
+
+    if (!image) {
+      toast.error("Please choose an image");
       return;
     }
 
     const formData = new FormData();
-    formData.append('fileView', fileView);
     formData.append('title', title);
     formData.append('summary', summary);
     formData.append('content', content);
     formData.append('timeNow', timeNow);
     formData.append('likes', 0);
+    formData.append('image', image);
 
-    const response = await fetch(`${BACK_URL}/post`, {
+    const response = await fetch(`${BACK_URL}/postblog`, {
       method: 'POST',
       credentials: 'include',
       body: formData
@@ -79,8 +70,14 @@ const CreatePost = () => {
       <div className="blogcontainer">
         <div className="blogstart">
           <div className="image_likes">
-            <input type="file" id="fileselect" accept="image/*" onChange={e => { handleFileView(e) }} />
-            <img className="blogimg" src={fileView ? `${fileView}` : 'placeholder.jpg'} alt="blogimg" height={100} width={100} onClick={handleClickImageHolder} />
+            {image === '' ?
+              <>
+                <label htmlFor="fileselect" className="fileselectlabel">Upload Image</label>
+                <input type="file" id="fileselect" accept="image/*" onChange={(e) => { handleImageClick(e) }} />
+              </>
+              :
+              <img className="blogimg" src={imageSrc} alt="blogimg" height={100} width={100} />
+            }
           </div>
           <div className="author_date">
             <p>Ram</p>

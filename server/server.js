@@ -10,9 +10,21 @@ import multer from 'multer';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+
+
+// to be used by multer
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const multerUpload = multer({ dest: 'uploads/' });
 
+// multer criterias set
+// const multerUpload = multer({
+//   limits: {
+//     fieldSize: 10 * 1024 * 1024, // 10 mb
+//   },
+
+//   dest: 'uploads/'
+// });
 
 const app = express();
 
@@ -24,43 +36,43 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }
-app.use(cors(corsOptions));
-app.use('/uploads', express.static(`${__dirname}/uploads`));
-app.use(cookieParser()); // used for req.cookies, also do ceredentials: include in front end
 
+// middle wares and stuffs
+app.use(cors(corsOptions));
+app.use(cookieParser()); // used for req.cookies, also do ceredentials: include in front end
+app.use(express.json({ limit: '10mb' })); // middleware
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use('/uploads', express.static(`${__dirname}/uploads`)); // multer muddleware
+
+// conntecting to mongodb database
 const MONGO_URI = process.env.MONGO_URI;
 mongoose.connect(MONGO_URI);
 
-app.use(express.json({ limit: '10mb' })); // middleware
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
-
+// listening on port XYZ
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  console.log(`App listening :)`);
 })
 
-const multerUpload = multer({
-  limits: {
-    fieldSize: 10 * 1024 * 1024, // 10 mb
-  },
-
-  dest: 'uploads/'
-});
-
-// const multerUpload = multer({ dest: 'uploads/' });
 
 
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY; // used in jwt
+const PRIVATE_KEY = process.env.PRIVATE_KEY; // to be used in jwt
+
+
+
+// -----------------------------------------------------------------------------------------------------------------------------
+
+
 
 // ---- End Points ----
 
 // -- Sign Up --
 app.post('/signup', (req, res) => {
   const { userName, email, password } = req.body;
-  const saltRounds = 10;
+  const saltRounds = 10; // used in bcrypt
 
-  bcrypt.hash(password, saltRounds, async function (err, hashedPassword) {
+  bcrypt.hash(password, saltRounds, async function (err, hashedPassword) { // bcrypt hashes password and stores in hashedPassword
     if (err) {
       res.status(500).json("Error hashing password");
       return;
@@ -75,7 +87,7 @@ app.post('/signup', (req, res) => {
 
       var token = jwt.sign({ userName: userSignUpDoc.userName, id: userSignUpDoc._id }, PRIVATE_KEY);
 
-      res.cookie('token', token, {
+      res.cookie('token', token, {  // setting cookie with age and other stuffs
         path: '/',
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 30, // token valid for a month
@@ -87,8 +99,8 @@ app.post('/signup', (req, res) => {
 
     }
     catch (err) {
-      console.log(err)
-      res.status(500).json("Error signing up")
+      console.log(err);
+      res.status(500).json("Error signing up");
     }
   });
 })
@@ -101,7 +113,7 @@ app.post('/login', async (req, res) => {
   try {
     const userLoginDoc = await UserModel.findOne({ email });
 
-    const passwordIsOkay = await bcrypt.compare(password, userLoginDoc.password);
+    const passwordIsOkay = await bcrypt.compare(password, userLoginDoc.password); // bcrypt compare password
 
     if (passwordIsOkay) {
       var token = jwt.sign({ userName: userLoginDoc.userName, id: userLoginDoc._id }, PRIVATE_KEY);
@@ -131,13 +143,13 @@ app.get('/profile', async (req, res) => {
   const { token } = req.cookies; // using cookie parser library
 
   jwt.verify(token, PRIVATE_KEY, (err, info) => {
-
     if (err) {
       res.status(401).json({ error: "Invalid token" });
       return;
     }
+
     res.status(200).json(info);
-  });
+  })
 })
 
 
@@ -145,19 +157,20 @@ app.get('/profile', async (req, res) => {
 app.post('/logout', async (req, res) => {
   try {
     res.cookie('token', '');
-    res.status(200).json(null)
+    res.status(200).json(null);
   }
   catch (e) {
-    res.status(500).json("Error logging out")
+    res.status(500).json("Error logging out");
   }
 })
 
 
 // -- Post Blog --
-app.post('/post', multerUpload.single('fileView'), (req, res) => {
+app.post('/postblog', multerUpload.single('image'), (req, res) => {
   const { title, summary, content, timeNow, likes } = req.body;
-  const { fileView } = req.file;
+  const { image } = req.file;
   const token = req.cookies;
 
-  res.status(200).json(title, summary, content, timeNow, likes, fileView);
+  res.status(200).json({ title, summary, content, timeNow, likes, image });
+  console.log(image);
 })

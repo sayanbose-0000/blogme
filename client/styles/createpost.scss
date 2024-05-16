@@ -32,6 +32,17 @@
           border-radius: 10px;
         }
 
+        .fileselectlabel {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          border: 1px solid rgba(245, 245, 245, 0.192);
+          border-radius: 10px;
+        }
+
         #fileselect {
           display: none;
         }
@@ -41,7 +52,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        padding:0 10px;
+        padding: 0 10px;
         font-size: 0.9rem;
         color: rgba(245, 245, 245, 0.334);
       }
