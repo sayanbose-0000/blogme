@@ -51,11 +51,8 @@ mongoose.connect(MONGO_URI);
 // listening on port XYZ
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`App listening :)`);
+  console.log(`App listening...`);
 })
-
-
-
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY; // to be used in jwt
 
@@ -168,9 +165,28 @@ app.post('/logout', async (req, res) => {
 // -- Post Blog --
 app.post('/postblog', multerUpload.single('image'), (req, res) => {
   const { title, summary, content, timeNow, likes } = req.body;
-  const { image } = req.file;
   const token = req.cookies;
 
-  res.status(200).json({ title, summary, content, timeNow, likes, image });
-  console.log(image);
+  let newPath = null;
+  console.log(req.file);
+
+  if (!req.file) {
+    res.status(400).json("No file uploaded");
+  }
+
+  const { originalname, path } = req.file; // file comes in this format with many fields, we use this one { fieldname: 'image', originalname: '.trashed-1703216360-IMG20231120022400.jpg', encoding: '7bit', mimetype: 'image/jpeg', destination: 'uploads/', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', path: 'uploads\\6a8b3ec3ef2484d2cd87ae1973862b3e', size: 690294 }
+  const parts = originalname.split('.') // seperates file name and extension
+  const extension = parts[parts.length - 1]; // gets the last value of parts array that is bound to be the extension
+
+  const date = new Date().getTime(); // returns the number of milliseconds for this date since the epoch, which is defined as the midnight at the beginning of January 1, 1970, UTC.
+  newPath = date + '.' + extension;
+
+  try {
+    fs.renameSync(path, newPath);
+    res.status(200).json("File uploaded successfully");
+  }
+  catch (err) {
+    res.status(500).json("Error uploading file");
+  }
+
 })
