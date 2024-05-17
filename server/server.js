@@ -10,7 +10,7 @@ import multer from 'multer';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-
+// import ImgurClient from 'imgur';
 
 // to be used by multer
 const __filename = fileURLToPath(import.meta.url);
@@ -167,7 +167,6 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
   const { title, summary, content, timeNow, likes } = req.body;
   const token = req.cookies;
 
-  let newPath = null;
   console.log(req.file);
 
   if (!req.file) {
@@ -179,14 +178,23 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
   const extension = parts[parts.length - 1]; // gets the last value of parts array that is bound to be the extension
 
   const date = new Date().getTime(); // returns the number of milliseconds for this date since the epoch, which is defined as the midnight at the beginning of January 1, 1970, UTC.
-  newPath = date + '.' + extension;
+  const newPath = `${__dirname}/uploads/${date}.${extension}`;
 
   try {
     fs.renameSync(path, newPath);
-    res.status(200).json("File uploaded successfully");
+    // res.status(200).json("File uploaded successfully");
+
+    // const imgur = new ImgurClient({ clientId: process.env.IMGUR_CLIENT_ID });
+
+    // imgur.upload(newPath).then(urlObject => {
+    //   fs.unlinkSync(newPath);
+    //   res.status(200).json(urlObject.link);
+    // })
+
+    res.status(200).json("Uploaded to imgur");
   }
+
   catch (err) {
     res.status(500).json("Error uploading file");
   }
-
 })
