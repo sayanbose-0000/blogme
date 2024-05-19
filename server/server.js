@@ -164,26 +164,28 @@ app.post('/logout', async (req, res) => {
 // -- Post Blog --
 app.post('/postblog', multerUpload.single('image'), (req, res) => {
     const { title, summary, content, timeNow, likes } = req.body;
-    const { token } = req.cookies;
-
+    
     if (!req.file) {
         res.status(400).json("No file uploaded");
     }
-
-    const { originalname, path } = req.file; // file comes in this format with many fields, we use this one { fieldname: 'image', originalname: '.trashed-1703216360-IMG20231120022400.jpg', encoding: '7bit', mimetype: 'image/jpeg', destination: 'uploads/', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', path: 'uploads\\6a8b3ec3ef2484d2cd87ae1973862b3e', size: 690294 }
-    const parts = originalname.split('.') // seperates file name and extension
-    const extension = parts[parts.length - 1]; // gets the last value of parts array that is bound to be the extension
-
-    const date = new Date().getTime(); // returns the number of milliseconds for this date since the epoch, which is defined as the midnight at the beginning of January 1, 1970, UTC.
-    const newPath = `${__dirname}/uploads/${date}.${extension}`;
+    
+    const { token } = req.cookies;
 
     try {
-        fs.renameSync(path, newPath);
-
         jwt.verify(token, PRIVATE_KEY, async (err, info) => {
             if (err) {
                 res.status(401).json("Invalid User, Please Sign In");
+                return;
             }
+
+            const { originalname, path } = req.file; // file comes in this format with many fields, we use this one { fieldname: 'image', originalname: '.trashed-1703216360-IMG20231120022400.jpg', encoding: '7bit', mimetype: 'image/jpeg', destination: 'uploads/', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', path: 'uploads\\6a8b3ec3ef2484d2cd87ae1973862b3e', size: 690294 }
+            const parts = originalname.split('.') // seperates file name and extension
+            const extension = parts[parts.length - 1]; // gets the last value of parts array that is bound to be the extension
+        
+            const date = new Date().getTime(); // returns the number of milliseconds for this date since the epoch, which is defined as the midnight at the beginning of January 1, 1970, UTC.
+            const newPath = `${__dirname}/uploads/${date}.${extension}`;
+
+            fs.renameSync(path, newPath);
 
             const uploadImage = async (newPath) => {
 
