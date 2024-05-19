@@ -5,15 +5,12 @@ import '../styles/home.scss';
 const Home = () => {
 
   useEffect(() => {
-
-    // anonymous function being called
-    (
-      async () => {
+    ( // anonymous function
+      () => {
         
       }
-    )();
-
-  }, [])
+    )(); // calling the anonymous function
+  })
 
   return (
     <div className='home'>
