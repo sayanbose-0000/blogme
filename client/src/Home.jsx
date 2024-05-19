@@ -3,6 +3,18 @@ import BlogCard from './BlogCard';
 import '../styles/home.scss';
 
 const Home = () => {
+
+  useEffect(() => {
+
+    // anonymous function being called
+    (
+      async () => {
+        
+      }
+    )();
+
+  }, [])
+
   return (
     <div className='home'>
       <BlogCard />

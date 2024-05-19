@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import { BACK_URL } from './main';
 import { formats, modules } from './QuillExtentions';
 import { toast } from 'react-toastify';
+import { Navigate } from 'react-router-dom';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
@@ -13,6 +14,8 @@ const CreatePost = () => {
   const [timeNow, setTimeNow] = useState('');
   const [image, setImage] = useState('');
   const [imageSrc, setImageSrc] = useState('');
+  const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     updateDate();
@@ -50,6 +53,8 @@ const CreatePost = () => {
       return;
     }
 
+    setLoading(true);
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('summary', summary);
@@ -63,6 +68,15 @@ const CreatePost = () => {
       credentials: 'include',
       body: formData
     })
+
+    response.ok ? toast.success(await response.json()) : toast.error(await response.json());
+    response.ok ? setRedirect(true) : null;
+
+    setLoading(false);
+  }
+
+  if (redirect) {
+    return <Navigate to={'/'} />
   }
 
   return (
@@ -76,7 +90,9 @@ const CreatePost = () => {
                 <input type="file" id="fileselect" accept="image/*" onChange={(e) => { handleImageClick(e) }} />
               </>
               :
-              <img className="blogimg" src={imageSrc} alt="blogimg" height={100} width={100} />
+              <>
+                <img className="blogimg" src={imageSrc} alt="blogimg" height={100} width={100} />
+              </>
             }
           </div>
           <div className="author_date">
@@ -90,7 +106,12 @@ const CreatePost = () => {
             <input type="text" name="" id="" placeholder='Enter summary' className='summary' value={summary} onChange={(e) => { setSummary(e.target.value) }} required />
           </div>
           <ReactQuill value={content} modules={modules} formats={formats} onChange={setContent} />
-          <button className='submit'>Submit</button>
+          {
+            loading ?
+              <button className='notsubmit' disabled>Loading...</button>
+              :
+              <button className='submit'>Submit</button>
+          }
         </form>
       </div>
     </div>

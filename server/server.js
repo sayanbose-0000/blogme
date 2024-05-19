@@ -1,21 +1,23 @@
-import express from 'express';
+import express, { response } from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import UserModel from './models/UserModel.js';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-// import ImgurClient from 'imgur';
+import UserModel from './models/UserModel.js';
+import PostModel from './models/PostModel.js';
+import { v2 as cloudinary } from 'cloudinary';
 
 // to be used by multer
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const multerUpload = multer({ dest: 'uploads/' });
+
 
 // multer criterias set
 // const multerUpload = multer({
@@ -31,11 +33,15 @@ const app = express();
 // handling stuffs allowed by cors
 const FRONT_URL = process.env.FRONT_URL;
 const corsOptions = {
-  origin: FRONT_URL,
-  methods: ['GET', 'POST', 'PUT'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+    origin: FRONT_URL,
+    methods: ['GET', 'POST', 'PUT'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }
+
+cloudinary.config({
+    CLOUDINARY_URL: process.env.CLOUDINARY_URL
+});
 
 // middle wares and stuffs
 app.use(cors(corsOptions));
@@ -51,150 +57,181 @@ mongoose.connect(MONGO_URI);
 // listening on port XYZ
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`App listening...`);
+    console.log(`App listening...`);
 })
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY; // to be used in jwt
 
 
-
 // -----------------------------------------------------------------------------------------------------------------------------
-
 
 
 // ---- End Points ----
 
 // -- Sign Up --
 app.post('/signup', (req, res) => {
-  const { userName, email, password } = req.body;
-  const saltRounds = 10; // used in bcrypt
+    const { userName, email, password } = req.body;
+    const saltRounds = 10; // used in bcrypt
 
-  bcrypt.hash(password, saltRounds, async function (err, hashedPassword) { // bcrypt hashes password and stores in hashedPassword
-    if (err) {
-      res.status(500).json("Error hashing password");
-      return;
-    }
+    bcrypt.hash(password, saltRounds, async function (err, hashedPassword) { // bcrypt hashes password and stores in hashedPassword
+        if (err) {
+            res.status(500).json("Error hashing password");
+            return;
+        }
 
-    try {
-      const userSignUpDoc = await UserModel.create({
-        userName,
-        email,
-        password: hashedPassword
-      })
+        try {
+            const userSignUpDoc = await UserModel.create({
+                userName,
+                email,
+                password: hashedPassword
+            })
 
-      var token = jwt.sign({ userName: userSignUpDoc.userName, id: userSignUpDoc._id }, PRIVATE_KEY);
+            var token = jwt.sign({ userName: userSignUpDoc.userName, id: userSignUpDoc._id }, PRIVATE_KEY);
 
-      res.cookie('token', token, {  // setting cookie with age and other stuffs
-        path: '/',
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 30, // token valid for a month
-        sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-        secure: process.env.NODE_ENV !== "Development"
-      });
+            res.cookie('token', token, {  // setting cookie with age and other stuffs
+                path: '/',
+                httpOnly: true,
+                maxAge: 1000 * 60 * 60 * 24 * 30, // token valid for a month
+                sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+                secure: process.env.NODE_ENV !== "Development"
+            });
 
-      res.status(201).json("Successful sign up");
+            res.status(201).json("Successful sign up");
 
-    }
-    catch (err) {
-      console.log(err);
-      res.status(500).json("Error signing up");
-    }
-  });
+        } catch (err) {
+            res.status(500).json("Error signing up");
+        }
+    });
 })
 
 
 // -- Log In --
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  try {
-    const userLoginDoc = await UserModel.findOne({ email });
+    try {
+        const userLoginDoc = await UserModel.findOne({ email });
 
-    const passwordIsOkay = await bcrypt.compare(password, userLoginDoc.password); // bcrypt compare password
+        const passwordIsOkay = await bcrypt.compare(password, userLoginDoc.password); // bcrypt compare password
 
-    if (passwordIsOkay) {
-      var token = jwt.sign({ userName: userLoginDoc.userName, id: userLoginDoc._id }, PRIVATE_KEY);
+        if (passwordIsOkay) {
+            var token = jwt.sign({ userName: userLoginDoc.userName, id: userLoginDoc._id }, PRIVATE_KEY);
 
-      res.cookie('token', token, {
-        path: '/',
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 30, // token valid for a month
-        sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-        secure: process.env.NODE_ENV !== "Development"
-      });
+            res.cookie('token', token, {
+                path: '/',
+                httpOnly: true,
+                maxAge: 1000 * 60 * 60 * 24 * 30, // token valid for a month
+                sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+                secure: process.env.NODE_ENV !== "Development"
+            });
 
-      res.status(200).json("Successful log in");
+            res.status(200).json("Successful log in");
+        } else {
+            res.status(401).json("Wrong Password");
+        }
+    } catch (err) {
+        res.status(401).json("Incorrect credentials");
     }
-    else {
-      res.status(401).json("Wrong Password");
-    }
-  }
-  catch (err) {
-    res.status(401).json("Incorrect credentials");
-  }
 })
 
 
 // -- Verify User --
 app.get('/profile', async (req, res) => {
-  const { token } = req.cookies; // using cookie parser library
+    const { token } = req.cookies; // using cookie parser library
 
-  jwt.verify(token, PRIVATE_KEY, (err, info) => {
-    if (err) {
-      res.status(401).json({ error: "Invalid token" });
-      return;
-    }
+    jwt.verify(token, PRIVATE_KEY, (err, info) => {
+        if (err) {
+            res.status(401).json({ error: "Invalid token" });
+            return;
+        }
 
-    res.status(200).json(info);
-  })
+        res.status(200).json(info);
+    })
 })
 
 
 // -- Logout --
 app.post('/logout', async (req, res) => {
-  try {
-    res.cookie('token', '');
-    res.status(200).json(null);
-  }
-  catch (e) {
-    res.status(500).json("Error logging out");
-  }
+    try {
+        res.cookie('token', '');
+        res.status(200).json(null);
+    } catch (e) {
+        res.status(500).json("Error logging out");
+    }
 })
 
 
 // -- Post Blog --
 app.post('/postblog', multerUpload.single('image'), (req, res) => {
-  const { title, summary, content, timeNow, likes } = req.body;
-  const token = req.cookies;
+    const { title, summary, content, timeNow, likes } = req.body;
+    const { token } = req.cookies;
 
-  console.log(req.file);
+    if (!req.file) {
+        res.status(400).json("No file uploaded");
+    }
 
-  if (!req.file) {
-    res.status(400).json("No file uploaded");
-  }
+    const { originalname, path } = req.file; // file comes in this format with many fields, we use this one { fieldname: 'image', originalname: '.trashed-1703216360-IMG20231120022400.jpg', encoding: '7bit', mimetype: 'image/jpeg', destination: 'uploads/', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', path: 'uploads\\6a8b3ec3ef2484d2cd87ae1973862b3e', size: 690294 }
+    const parts = originalname.split('.') // seperates file name and extension
+    const extension = parts[parts.length - 1]; // gets the last value of parts array that is bound to be the extension
 
-  const { originalname, path } = req.file; // file comes in this format with many fields, we use this one { fieldname: 'image', originalname: '.trashed-1703216360-IMG20231120022400.jpg', encoding: '7bit', mimetype: 'image/jpeg', destination: 'uploads/', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', path: 'uploads\\6a8b3ec3ef2484d2cd87ae1973862b3e', size: 690294 }
-  const parts = originalname.split('.') // seperates file name and extension
-  const extension = parts[parts.length - 1]; // gets the last value of parts array that is bound to be the extension
+    const date = new Date().getTime(); // returns the number of milliseconds for this date since the epoch, which is defined as the midnight at the beginning of January 1, 1970, UTC.
+    const newPath = `${__dirname}/uploads/${date}.${extension}`;
 
-  const date = new Date().getTime(); // returns the number of milliseconds for this date since the epoch, which is defined as the midnight at the beginning of January 1, 1970, UTC.
-  const newPath = `${__dirname}/uploads/${date}.${extension}`;
+    try {
+        fs.renameSync(path, newPath);
 
-  try {
-    fs.renameSync(path, newPath);
-    // res.status(200).json("File uploaded successfully");
+        jwt.verify(token, PRIVATE_KEY, async (err, info) => {
+            if (err) {
+                res.status(401).json("Invalid User, Please Sign In");
+            }
 
-    // const imgur = new ImgurClient({ clientId: process.env.IMGUR_CLIENT_ID });
+            const uploadImage = async (newPath) => {
 
-    // imgur.upload(newPath).then(urlObject => {
-    //   fs.unlinkSync(newPath);
-    //   res.status(200).json(urlObject.link);
-    // })
+                // Use the uploaded file's name as the asset's public ID and 
+                // allow overwriting the asset with new versions
+                const options = {
+                    folder: "blogme-images",
+                    use_filename: true,
+                    unique_filename: false,
+                    overwrite: true,
+                };
 
-    res.status(200).json("Uploaded to imgur");
-  }
+                try {
+                    // Upload the image
+                    const result = await cloudinary.uploader.upload(newPath, options);
+                    return result.public_id;
+                }
 
-  catch (err) {
-    res.status(500).json("Error uploading file");
-  }
+                catch (error) {
+                    res.status(500).json("Error uploading picure");
+                }
+            }
+
+            const publicId = await uploadImage(newPath);
+
+            try {
+                const postDoc = await PostModel.create({
+                    imagePath: publicId,
+                    title,
+                    summary,
+                    content,
+                    author: info.id,
+                    date: timeNow,
+                    likes
+                })
+
+                if (postDoc) {
+                    fs.unlinkSync(newPath);
+                }
+
+                res.status(200).json("Successfully posted your blog");
+            } catch (err) {
+                res.status(500).json("Error posting the blog");
+            }
+        })
+
+    } catch (err) {
+        res.status(500).json("Error uploading file");
+    }
 })
+

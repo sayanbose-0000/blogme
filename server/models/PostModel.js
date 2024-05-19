@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const PostSchema = new Schema(
   {
-    image: {
+    imagePath: {
       type: String,
       required: true
     },
@@ -38,3 +38,6 @@ const PostSchema = new Schema(
     }
   }
 )
+
+const PostModel = model('blogme-posts', PostSchema);
+export default PostModel;

@@ -137,12 +137,17 @@
         }
       }
 
-      .submit {
+      .submit, .notsubmit {
         padding: 6px;
         // width: 50%;t
         border-radius: 5px;
         cursor: pointer;
         align-self: center;
+      }
+
+      .notsubmit {
+        color: rgb(196, 196, 196);
+        cursor: not-allowed;
       }
 
       .submit:hover {
