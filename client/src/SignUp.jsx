@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import '../styles/register.scss';
+import { Navigate } from 'react-router-dom';
 import { BACK_URL } from './main';
 import { toast } from 'react-toastify';
-import { Navigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
-import { useEffect } from 'react';
+import '../styles/register.css'
 
 const SignUp = () => {
   const [userName, setUserName] = useState('');
@@ -31,27 +30,19 @@ const SignUp = () => {
     response.ok ? setRedirect(true) : null;
   }
 
-  // useEffect(() => {
-  //   if (redirect) {
-  //     setLoggedIn(true);
-  //     <Navigate to={'/'} />
-  //   }
-  // }, [redirect]);
-
   if (redirect) {
     setLoggedIn(true)
     return <Navigate to={'/'} />
   }
 
-
   return (
-    <div className='signup register'>
-      <form onSubmit={(e) => { handleSignUp(e) }}>
-        <h1>Sign Up</h1>
-        <input type="text" placeholder='Enter username...' autoComplete="username" required autoFocus value={userName} onChange={(e) => { setUserName(e.target.value) }} />
-        <input type="email" placeholder='Enter email...' autoComplete="email" required value={email} onChange={(e) => { setEmail(e.target.value) }} />
-        <input type="password" placeholder='Enter password...' autoComplete="new-password" required value={password} onChange={(e) => { setPassword(e.target.value) }} />
-        <button type='submit' className='submit'>SignUp</button>
+    <div className='register__signup register'>
+      <form onSubmit={(e) => { handleSignUp(e) }} className='register__form'>
+        <h1 className='register__form--title'>Sign Up</h1>
+        <input type="text" placeholder='Enter username...' autoComplete="username" required autoFocus value={userName} onChange={(e) => { setUserName(e.target.value) }} className='register__form--input' />
+        <input type="email" placeholder='Enter email...' autoComplete="email" required value={email} onChange={(e) => { setEmail(e.target.value) }} className='register__form--input' />
+        <input type="password" placeholder='Enter password...' autoComplete="new-password" required value={password} onChange={(e) => { setPassword(e.target.value) }} className='register__form--input' />
+        <button type='submit' className='register__form--submit'>SignUp</button>
       </form>
     </div>
   );

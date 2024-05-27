@@ -1,4 +1,4 @@
-import '../styles/usermenu.scss';
+import '../styles/usermenu.css';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { userAuthContext } from './UserContextProvider';

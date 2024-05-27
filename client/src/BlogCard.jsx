@@ -1,25 +1,25 @@
 import React from 'react';
-import '../styles/blogcard.scss';
 import { Link } from 'react-router-dom';
+import '../styles/blogcard.css';
 
-const BlogCard = () => {
+const BlogCard = ({ id, imagePath, title, summary, content, author, date, likes }) => {
+  console.log(author);
   return (
     <Link to="/blogpost" className='blogcard'>
-      <img src="placeholder.jpg" className="blogimg" alt="blogimg" height={100} width={100} />
-      <div className="likes">
-        <p className="likescount">10k</p>
-        <img src="heart_fill.svg" alt="heart" className="heart" height={100} width={100} />
+      <img src="placeholder.jpg" className="blogcard__img" alt="blogimg" height={100} width={100} />
+      <div className="blogcard__likes">
+        <p className="blogcard__likescount">{likes}</p>
+        <img src="heart_fill.svg" alt="heart" className="blogcard__heart" height={100} width={100} />
       </div>
-      <div className="content">
-        <div className="details">
-          <p className="author">Aman</p>
-          <p className="date">12/1/23</p>
+      <div className="blogcard__content">
+        <div className="blogcard__details">
+          <p className="blogcard__author">{author}</p>
+          <p className="blogcard__date">{date}</p>
         </div>
-        <p className='title'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reprehenderit blanditiis assumenda magni repudiandae quae natus labore, qui quas perspiciatis, quisquam quia unde accusantium dolor cupiditate cum laudantium, nostrum beatae mollitia?</p>
-        <p className='summary'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam non at, id esse facilis nam totam nihil quibusdam nemo consequuntur vitae fuga enim sunt corrupti ducimus. Quae quos fugit neque?</p>
+        <p className='blogcard__title'>{title}</p>
+        <p className='blogcard__summary'>{summary}</p>
       </div>
     </Link>
-  )
-}
-
+  );
+};
 export default BlogCard;

@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import '../styles/register.scss';
 import { Navigate, useOutletContext } from 'react-router-dom';
 import { BACK_URL } from './main';
 import { toast } from 'react-toastify';
-import { useEffect } from 'react';
+import '../styles/register.css'
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -28,26 +27,18 @@ const Login = () => {
     response.ok ? setRedirect(true) : null;
   }
 
-  // useEffect(() => {
-  //   if (redirect) {
-  //     setLoggedIn(true);
-  //     <Navigate to={'/'} />
-  //   }
-  // }, [redirect]);
-
   if (redirect) {
     setLoggedIn(true)
     return <Navigate to={'/'} />
   }
 
-
   return (
-    <div className='signup register'>
-      <form onSubmit={(e) => { handleLoginSubmit(e) }}>
-        <h1>Log In</h1>
-        <input type="email" placeholder='Enter email...' autoComplete="email" required autoFocus value={email} onChange={(e) => { setEmail(e.target.value) }} />
-        <input type="password" placeholder='Enter password...' autoComplete="new-password" required value={password} onChange={(e) => { setPassword(e.target.value) }} />
-        <button type='submit' className='submit'>Login</button>
+    <div className='register__login register'>
+      <form onSubmit={(e) => { handleLoginSubmit(e) }} className='register__form'>
+        <h1 className='register__form--title'>Log In</h1>
+        <input type="email" placeholder='Enter email...' autoComplete="email" required autoFocus value={email} onChange={(e) => { setEmail(e.target.value) }} className='register__form--input' />
+        <input type="password" placeholder='Enter password...' autoComplete="new-password" required value={password} onChange={(e) => { setPassword(e.target.value) }} className='register__form--input' />
+        <button type='submit' className='register__form--submit'>Login</button>
       </form>
     </div>
   );

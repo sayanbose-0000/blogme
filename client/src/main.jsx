@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createContext } from 'react';
-import '../styles/index.scss';
+import '../styles/index.css';
 import Layout from './Layout';
 import Home from './Home';
 import ErrorPage from './ErrorPage';

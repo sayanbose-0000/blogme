@@ -164,11 +164,11 @@ app.post('/logout', async (req, res) => {
 // -- Post Blog --
 app.post('/postblog', multerUpload.single('image'), (req, res) => {
     const { title, summary, content, timeNow, likes } = req.body;
-    
+
     if (!req.file) {
         res.status(400).json("No file uploaded");
     }
-    
+
     const { token } = req.cookies;
 
     try {
@@ -181,7 +181,7 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
             const { originalname, path } = req.file; // file comes in this format with many fields, we use this one { fieldname: 'image', originalname: '.trashed-1703216360-IMG20231120022400.jpg', encoding: '7bit', mimetype: 'image/jpeg', destination: 'uploads/', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', filename: '6a8b3ec3ef2484d2cd87ae1973862b3e', path: 'uploads\\6a8b3ec3ef2484d2cd87ae1973862b3e', size: 690294 }
             const parts = originalname.split('.') // seperates file name and extension
             const extension = parts[parts.length - 1]; // gets the last value of parts array that is bound to be the extension
-        
+
             const date = new Date().getTime(); // returns the number of milliseconds for this date since the epoch, which is defined as the midnight at the beginning of January 1, 1970, UTC.
             const newPath = `${__dirname}/uploads/${date}.${extension}`;
 
@@ -237,3 +237,14 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
     }
 })
 
+
+// -- Home Page --
+app.get('/home', async (req, res) => {
+    try {
+        const blogs = await PostModel.find().sort({ date: -1, likes: -1 }).populate("author");
+        res.status(200).json(blogs);
+    } catch (err) {
+        res.status(500).json("Cannot fetch notes!");
+        console.log(err)
+    }
+})

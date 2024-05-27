@@ -1,4 +1,4 @@
-import '../styles/createpost.scss';
+import '../styles/createpost.css';
 import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -6,6 +6,8 @@ import { BACK_URL } from './main';
 import { formats, modules } from './QuillExtentions';
 import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom';
+import { userAuthContext } from './UserContextProvider';
+import { useContext } from 'react';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
@@ -16,15 +18,20 @@ const CreatePost = () => {
   const [imageSrc, setImageSrc] = useState('');
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { userInfo, setUserInfo } = useContext(userAuthContext);
+  const userName = userInfo?.userName;
 
   useEffect(() => {
+    fetch(`${BACK_URL}/profile`, {
+
+    });
     updateDate();
   }, [])
 
   const updateDate = () => {
     const dateNow = new Date();
     const date = dateNow.getDate();
-    const month = dateNow.getMonth() + 1; // normally 0-indexed, converted to 1
+    const month = dateNow.getMonth() + 1; // 0-indexed, converted to 1
     const year = dateNow.getFullYear() % 100; // only last 2 digits
     setTimeNow(`${date}/${month}/${year}`);
   }
@@ -81,36 +88,36 @@ const CreatePost = () => {
 
   return (
     <div className='createpost'>
-      <div className="blogcontainer">
-        <div className="blogstart">
-          <div className="image_likes">
+      <div className="createpost__blogcontainer">
+        <div className="createpost__blogstart">
+          <div className="createpost__image-likes">
             {image === '' ?
               <>
-                <label htmlFor="fileselect" className="fileselectlabel">Upload Image</label>
-                <input type="file" id="fileselect" accept="image/*" onChange={(e) => { handleImageClick(e) }} />
+                <label htmlFor="createpost__fileselect" className="createpost__fileselectlabel">Upload Image</label>
+                <input type="file" id="createpost__fileselect" accept="image/*" onChange={(e) => { handleImageClick(e) }} />
               </>
               :
               <>
-                <img className="blogimg" src={imageSrc} alt="blogimg" height={100} width={100} />
+                <img className="createpost__blogimg" src={imageSrc} alt="blogimg" height={100} width={100} />
               </>
             }
           </div>
-          <div className="author_date">
-            <p>Ram</p>
+          <div className="createpost__author-date">
+            <p>{userName}</p>
             <p>{timeNow}</p>
           </div>
         </div>
-        <form className="blogcontent" onSubmit={(e) => { handleSignUp(e) }}>
-          <div className="title_summary">
-            <input type="text" name="" id="" placeholder='Enter title' className='title' value={title} onChange={(e) => { setTitle(e.target.value) }} required />
-            <input type="text" name="" id="" placeholder='Enter summary' className='summary' value={summary} onChange={(e) => { setSummary(e.target.value) }} required />
+        <form className="createpost__blogcontent" onSubmit={(e) => { handleSignUp(e) }}>
+          <div className="createpost__title-summary">
+            <input type="text" name="" id="" placeholder='Enter title' className='createpost__title' value={title} onChange={(e) => { setTitle(e.target.value) }} required />
+            <input type="text" name="" id="" placeholder='Enter summary' className='createpost__summary' value={summary} onChange={(e) => { setSummary(e.target.value) }} required />
           </div>
-          <ReactQuill value={content} modules={modules} formats={formats} onChange={setContent} />
+          <ReactQuill value={content} modules={modules} formats={formats} onChange={setContent} className='createpost__quill'/>
           {
             loading ?
-              <button className='notsubmit' disabled>Loading...</button>
+              <button className='createpost__notsubmit' disabled>Loading...</button>
               :
-              <button className='submit'>Submit</button>
+              <button className='createpost__submit'>Submit</button>
           }
         </form>
       </div>

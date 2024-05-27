@@ -1,0 +1,154 @@
+.createpost {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.createpost__blogcontainer {
+  border: 1px solid rgba(245, 245, 245, 0.192);
+  border-radius: 10px;
+  margin: 20px;
+  min-height: calc(100vh - 100px);
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.createpost__blogstart {
+  margin: 0;
+  padding: 0;
+}
+
+.createpost__image-likes {
+  background-color: black;
+  width: 100%;
+  height: 240px;
+  border-radius: 10px;
+  position: relative;
+  padding: 10px;
+}
+
+.createpost__blogimg {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.createpost__fileselectlabel {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid rgba(245, 245, 245, 0.192);
+  border-radius: 10px;
+}
+
+#createpost__fileselect {
+  display: none;
+}
+
+.createpost__author-date {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-size: 0.9rem;
+  color: rgba(245, 245, 245, 0.334);
+}
+
+.createpost__blogcontent {
+  padding: 10px;
+  color: rgba(245, 245, 245, 0.766);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.createpost__title-summary {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.createpost__title,
+.createpost__summary {
+  background-color: transparent;
+  color: whitesmoke;
+  border: 1px solid rgba(245, 245, 245, 0.192);
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+.createpost__title {
+  font-weight: bold;
+  font-size: large;
+  padding-top: 0;
+}
+
+.createpost__quill {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.createpost__quill .ql-toolbar {
+  border-radius: 5px 5px 0 0;
+  border: 1px solid rgba(245, 245, 245, 0.192);
+  border-bottom: 0;
+  overflow-x: auto;
+}
+
+.createpost__quill .ql-container {
+  flex: 1;
+  border-radius: 0 0 5px 5px;
+  overflow-y: scroll;
+  border: 1px solid rgba(245, 245, 245, 0.192);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.createpost__quill .ql-editor {
+  flex: 1;
+}
+
+.createpost__quill .ql-picker-options {
+  background-color: black;
+  border-radius: 10px;
+  color: whitesmoke;
+}
+
+.createpost__quill .ql-toolbar,
+.createpost__quill>.ql-toolbar>.ql-formats {
+  display: flex;
+  flex-direction: row;
+}
+
+.createpost__quill .ql-toolbar,
+.createpost__quill .ql-container {
+  border: 1px solid rgba(245, 245, 245, 0.192) !important;
+}
+
+.createpost__submit,
+.createpost__notsubmit {
+  padding: 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: center;
+}
+
+.createpost__notsubmit {
+  color: rgb(196, 196, 196);
+  cursor: not-allowed;
+}
+
+.createpost__submit:hover {
+  background-color: lightgreen;
+}
