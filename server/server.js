@@ -227,7 +227,7 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
           fs.unlinkSync(newPath); // removes img drom uploads folder
         }
 
-        res.status(200).json("Successfully posted your blog");
+        res.status(200).json({ message: "Successfully posted your blog", postId: postDoc._id });
       } catch (err) {
         res.status(500).json("Error posting the blog");
       }

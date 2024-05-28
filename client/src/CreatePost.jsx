@@ -19,6 +19,7 @@ const CreatePost = () => {
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
   const { userInfo, setUserInfo } = useContext(userAuthContext);
+  const [redirectedPath, setRedirectedPath] = useState("");
   const userName = userInfo?.userName;
 
   useEffect(() => {
@@ -73,16 +74,23 @@ const CreatePost = () => {
       body: formData
     })
 
-    response.ok ? toast.success(await response.json()) : toast.error(await response.json());
-    response.ok ? setRedirect(true) : null;
+    if (response.ok) {
+      const data = await response.json();
+      toast.success(data.message);
+      setRedirect(true);
+      setRedirectedPath(`/post/${data.postId}`)
+    }
 
-    console.log(response)
+    else {
+      const errData = await response.json();
+      toast.error(errData);
+    }
 
     setLoading(false);
   }
 
   if (redirect) {
-    return <Navigate to={'/'} />
+    return <Navigate to={redirectedPath} />
   }
 
   return (
