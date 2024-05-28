@@ -73,12 +73,17 @@
   text-align: center;
   color: whitesmoke;
   font-weight: bolder;
-  padding: 0 0 2px 0;
+  font-size: 1.2rem;
+  padding: 0 0 25px 0;
   border-bottom: 1px solid rgba(245, 245, 245, 0.192);
 }
 
+.blogpage__content-text {
+  padding: 5px;
+}
+
 .blogpage__content {
-  padding: 10px;
+  padding: 5px;
   min-height: 100%;
   color: (245, 245, 245, 0.766);
 }

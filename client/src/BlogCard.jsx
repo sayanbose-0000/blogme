@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/blogcard.css';
 
 const BlogCard = ({ id, imagePath, title, summary, content, author, date, likes }) => {
-  console.log(author);
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    (imagePath) ? setImage(imagePath) : setImage("placeholder.jpg");
+  })
+
   return (
-    <Link to="/blogpost" className='blogcard'>
-      <img src="placeholder.jpg" className="blogcard__img" alt="blogimg" height={100} width={100} />
+    <Link to={`/post/${id}`} className='blogcard'>
+      <img src={`${image}`} className="blogcard__img" alt="blogimg" height={100} width={100} />
       <div className="blogcard__likes">
         <p className="blogcard__likescount">{likes}</p>
-        <img src="heart_fill.svg" alt="heart" className="blogcard__heart" height={100} width={100} />
+        <img src="/heart_fill.svg" alt="heart" className="blogcard__heart" height={100} width={100} />
       </div>
       <div className="blogcard__content">
         <div className="blogcard__details">

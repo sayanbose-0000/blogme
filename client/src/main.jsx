@@ -38,12 +38,12 @@ const router = createBrowserRouter([
         element: <SignUp />
       },
       {
-        path: "/blogpost",
-        element: <BlogPage />
-      },
-      {
         path: "/create",
         element: <CreatePost />
+      },
+      {
+        path: "/post/:id",
+        element: <BlogPage />
       },
     ]
   },

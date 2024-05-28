@@ -22,9 +22,6 @@ const CreatePost = () => {
   const userName = userInfo?.userName;
 
   useEffect(() => {
-    fetch(`${BACK_URL}/profile`, {
-
-    });
     updateDate();
   }, [])
 
@@ -79,6 +76,8 @@ const CreatePost = () => {
     response.ok ? toast.success(await response.json()) : toast.error(await response.json());
     response.ok ? setRedirect(true) : null;
 
+    console.log(response)
+
     setLoading(false);
   }
 
@@ -112,7 +111,7 @@ const CreatePost = () => {
             <input type="text" name="" id="" placeholder='Enter title' className='createpost__title' value={title} onChange={(e) => { setTitle(e.target.value) }} required />
             <input type="text" name="" id="" placeholder='Enter summary' className='createpost__summary' value={summary} onChange={(e) => { setSummary(e.target.value) }} required />
           </div>
-          <ReactQuill value={content} modules={modules} formats={formats} onChange={setContent} className='createpost__quill'/>
+          <ReactQuill value={content} modules={modules} formats={formats} onChange={setContent} className='createpost__quill' />
           {
             loading ?
               <button className='createpost__notsubmit' disabled>Loading...</button>
