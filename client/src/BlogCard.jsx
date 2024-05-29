@@ -12,10 +12,12 @@ const BlogCard = ({ id, imagePath, title, summary, content, author, date, likes 
   return (
     <Link to={`/post/${id}`} className='blogcard'>
       <img src={`${image}`} className="blogcard__img" alt="blogimg" height={100} width={100} />
-      <div className="blogcard__likes">
-        <p className="blogcard__likescount">{likes}</p>
-        <img src="/heart_fill.svg" alt="heart" className="blogcard__heart" height={100} width={100} />
-      </div>
+      {/*
+        <div className="blogcard__likes">
+          <p className="blogcard__likescount">{likes}</p>
+          <img src="/heart_fill.svg" alt="heart" className="blogcard__heart" height={100} width={100} />
+        </div>
+      */}
       <div className="blogcard__content">
         <div className="blogcard__details">
           <p className="blogcard__author">{author}</p>

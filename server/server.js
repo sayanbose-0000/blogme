@@ -220,7 +220,6 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
           content,
           author: info.id,
           date: timeNow,
-          likes
         })
 
         if (postDoc) {
@@ -242,7 +241,7 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
 // -- Home Page --
 app.get('/home', async (req, res) => {
   try {
-    const blogsDoc = await PostModel.find().sort({ date: -1, likes: -1 }).populate("author");
+    const blogsDoc = await PostModel.find().sort({ date: -1 }).populate("author");
     res.status(200).json(blogsDoc);
   } catch (err) {
     res.status(500).json("Cannot fetch notes!");
@@ -259,4 +258,9 @@ app.get('/post/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json("Error fetching blog");
   }
+})
+
+// -- Delete Post --
+app.post('/deletepost', async (req, res) => {
+  
 })

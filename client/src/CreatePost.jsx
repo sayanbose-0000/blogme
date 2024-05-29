@@ -65,7 +65,7 @@ const CreatePost = () => {
     formData.append('summary', summary);
     formData.append('content', content);
     formData.append('timeNow', timeNow);
-    formData.append('likes', 0);
+    // formData.append('likes', 0);
     formData.append('image', image);
 
     const response = await fetch(`${BACK_URL}/postblog`, {

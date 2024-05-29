@@ -30,11 +30,6 @@ const PostSchema = new Schema(
     date: {
       type: String,
       required: true
-    },
-
-    likes: {
-      type: Number,
-      required: true
     }
   }
 )
