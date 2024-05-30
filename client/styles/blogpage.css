@@ -60,6 +60,10 @@
   padding: 1px;
 }
 
+.blogpage__edit {
+  text-decoration: none;
+}
+
 .blogpage__editdel:hover {
   text-decoration: underline;
 }

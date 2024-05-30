@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 import '../styles/blogpage.css';
-import { useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BACK_URL } from './main';
 import { toast } from 'react-toastify';
@@ -13,6 +13,7 @@ const BlogPage = () => {
   const [cleanHTML, setCleanHTML] = useState("");
   const [showEditDel, setShowEditDel] = useState(false);
   const { userInfo, setUserInfo } = useContext(userAuthContext);
+  const [redirect, setRedirect] = useState(false);
 
 
   useEffect(() => {
@@ -50,13 +51,26 @@ const BlogPage = () => {
   // })
 
   const handleDeletePost = async (e) => {
-    const response = fetch(`${BACK_URL}/deletepost`, {
-      method: 'POST',
-    })
+    const delResponse = confirm("Do you want to delete this post?");
+    if (delResponse) {
+      const response = await fetch(`${BACK_URL}/deletepost/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      })
 
-    
+      response.ok ? toast.success(await response.json()) : toast.error(await response.json());
+      response.ok ? setRedirect(true) : null;
+    }
+
+    return;
   }
 
+  if (redirect) {
+    return (
+      <Navigate to={"/"} />
+    )
+  }
 
   return (
     <div className='blogpage'>
@@ -67,7 +81,7 @@ const BlogPage = () => {
             {
               showEditDel &&
               <div className="blogpage__editdelcontainer">
-                <p className="blogpage__editdel blogpage__edit">Edit</p>
+                {/* <p className="blogpage__editdel blogpage__edit">Edit</p> */}
                 <p className="blogpage__editdel blogpage__del" onClick={(e) => { handleDeletePost(e) }}>Delete</p>
               </div>
             }

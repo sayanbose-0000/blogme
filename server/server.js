@@ -16,7 +16,9 @@ import { v2 as cloudinary } from 'cloudinary';
 // to be used by multer
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const multerUpload = multer({ dest: 'uploads/' });
+const multerUpload = multer({ 
+  dest: 'uploads/'
+});
 
 
 // multer criterias set
@@ -171,7 +173,6 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
 
   const { token } = req.cookies;
 
-  try {
     jwt.verify(token, PRIVATE_KEY, async (err, info) => {
       if (err) {
         res.status(401).json("Invalid User, Please Sign In");
@@ -231,10 +232,6 @@ app.post('/postblog', multerUpload.single('image'), (req, res) => {
         res.status(500).json("Error posting the blog");
       }
     })
-
-  } catch (err) {
-    res.status(500).json("Error uploading file");
-  }
 })
 
 
@@ -245,7 +242,7 @@ app.get('/home', async (req, res) => {
     res.status(200).json(blogsDoc);
   } catch (err) {
     res.status(500).json("Cannot fetch notes!");
-    console.log(err);
+    // console.log(err);
   }
 })
 
@@ -261,6 +258,41 @@ app.get('/post/:id', async (req, res) => {
 })
 
 // -- Delete Post --
-app.post('/deletepost', async (req, res) => {
-  
+app.post('/deletepost/:id', (req, res) => {
+  const { id } = req.params;
+  const { token } = req.cookies;
+
+  jwt.verify(token, PRIVATE_KEY, async (err, info) => {
+    if (err) {
+      res.status(401).json({ error: "Invalid token" });
+      return;
+    }
+
+    try {
+      const findDoc = await PostModel.findOne({ _id: id });
+      const delDoc = await PostModel.deleteOne({ _id: id });
+
+      // const options = {
+      //   folder: "blogme-images",
+      //   use_filename: true,
+      //   unique_filename: false,
+      //   overwrite: true,
+      // };
+
+      // console.log(findDoc, delDoc);
+
+      if (findDoc) {
+        const public_id = findDoc.imagePath.split('/').pop().split('.')[0];
+        // console.log(public_id);
+        cloudinary.uploader.destroy(`blogme-images/${public_id}`)
+        // .then (res => console.log(res))
+      }
+
+      res.status(200).json("BLog deleted successfully");
+
+    } catch (err) {
+      // console.log(err)
+      res.status(500).json("Error deleting blog");
+    }
+  })
 })
