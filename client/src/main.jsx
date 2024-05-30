@@ -14,8 +14,8 @@ import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserContextProvider from './UserContextProvider';
 
-// const BACK_URL = import.meta.env.VITE_API_BASE_URL;  // do this and add .env while using vercel, only works with vercel
-const BACK_URL = 'http://localhost:3000' // and delete this
+const BACK_URL = import.meta.env.VITE_API_BASE_URL;  // do this and add .env while using vercel, only works with vercel
+// const BACK_URL = 'http://localhost:3000' // and delete this
 
 export { BACK_URL };
 
